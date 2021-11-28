@@ -100,7 +100,7 @@ def test_algorithm_times
       res_dijkstra[sv] = dijkstra(g, sv)
     end
     elapsed_time_dijkstra = Process.clock_gettime(Process::CLOCK_MONOTONIC) - starting_time
-    results += "#{elapsed_time_dijkstra.to_s}, "
+    results += "#{elapsed_time_dijkstra.to_s},\n"
     # Double check again that the results are the same
     error_msg = "error: dijkstra result does not match output from floyd's"
     raise error_msg unless res_floyd == res_dijkstra
