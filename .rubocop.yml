@@ -1,5 +1,6 @@
-Style/Encoding:
-  Enabled: false
+require:
+  - rubocop-performance
+  - rubocop-rspec
 
 Layout/LineLength:
   Max: 99
@@ -9,3 +10,6 @@ Metrics/AbcSize:
 
 Metrics/MethodLength:
   Max: 22
+
+  Style/Encoding:
+    Enabled: false
