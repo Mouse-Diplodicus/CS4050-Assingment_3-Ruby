@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Assign 03 - Matthew Williams
 
 # could be useful for Dijkstra
