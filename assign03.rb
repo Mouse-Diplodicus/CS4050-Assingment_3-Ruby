@@ -106,15 +106,15 @@ def test_algorithm_times
   """ Function to run tests for algorithm solving times """
 
   results = ''
-  range(25, 1000, 25).each do |i|
-    results += str(i) + ', '
-    g = adjMatFromFile("graphs/" + str(i) + "verts.txt")
+  (25..1000).step(25).each do |i|
+    results += i.to_s + ', '
+    g = adjMatFromFile("graphs/" + i.to_s + "verts.txt")
 
     # Run Floyd's algorithm
     starting_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     res_floyd = floyd(g)
     elapsed_time_floyd = Process.clock_gettime(Process::CLOCK_MONOTONIC) - starting_time
-    results += str(elapsed_time_floyd) + ', '
+    results += elapsed_time_floyd.to_s + ', '
 
     # Run Dijkstra's overall starting points (note this is not the intended way
     # to utilize this algorithm, however we are using it as point of comparion).
@@ -124,7 +124,7 @@ def test_algorithm_times
       res_dijkstra[sv] = dijkstra(g, sv)
     end
     elapsed_time_dijkstra = Process.clock_gettime(Process::CLOCK_MONOTONIC) - starting_time
-    results += str(elapsed_time_dijkstra) + ', '
+    results += elapsed_time_dijkstra.to_s + ', '
 
     # Double check again that the results are the same
     error_msg = "error: dijkstra result does not match output from floyd's"
