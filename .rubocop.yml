@@ -1,0 +1,14 @@
+inherit_from: ../.rubocop.yml
+
+Style/Encoding:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 99
+
+Metrics/AbcSize:
+  Max: 45
+
+Metrics/MethodLength:
+  Max: 22
+

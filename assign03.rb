@@ -11,37 +11,38 @@ def adj_mat_from_file(filename)
   f = open(filename)
   n_verts = f.readline.to_i
   printf(" n_verts = %d\n", n_verts)
-  adjmat = Array.new(n_verts){Array.new(n_verts, INF)}
+  adjmat = Array.new(n_verts) { Array.new(n_verts, INF) }
   (0..(n_verts - 1)).each { |i| adjmat[i][i] = 0 }
   f.each do |line|
-    int_list = Array.new
-    line.split().each { |num| int_list.push(num.to_i) }
-    vert = int_list.shift()
-    raise "error: Invalid matrix file" unless int_list.length % 2 == 0
+    int_list = []
+    line.split.each { |num| int_list.push(num.to_i) }
+    vert = int_list.shift
+    raise 'error: Invalid matrix file' unless int_list.even?
+
     n_neighbors = (int_list.length / 2).to_i
-    neighbors = Array.new()
-    distances = Array.new()
+    neighbors = []
+    distances = []
     (0..int_list.length).step(2) { |n| neighbors.push(int_list[n]) }
     (1..int_list.length).step(2) { |n| distances.push(int_list[n]) }
     (0..(n_neighbors - 1)).each do |i|
       adjmat[vert][neighbors[i]] = distances[i]
     end
   end
-  f.close()
-  return adjmat
+  f.close
+  adjmat
 end
 
-def print_adj_mat(mat, width=3)
+def print_adj_mat(mat, width = 3)
   # Print an adj/weight matrix padded with spaces and with vertex names.
   res_str = '       '
   (0..(mat.length - 1)).each { |v| res_str += v.to_s.rjust(width) }
-  res_str += "\n      --" + '-' * (width * mat.length) + "\n"
+  res_str += "\n      --#{'-' * (width * mat.length)}\n"
   mat.each_with_index do |row, i|
     row_str = ''
     row.each do |elem|
       row_str += elem.to_s.rjust(width)
     end
-    res_str += '   ' + i.to_s.rjust(2) + ' |' + row_str + "\n"
+    res_str += "   #{i.to_s.rjust(2)} |#{row_str}\n"
   end
   print(res_str)
 end
@@ -54,7 +55,7 @@ def floyd(graph)
       (0..(graph.length - 1)).each { |k| d[j][k] = [d[j][i] + d[i][k], d[j][k]].min }
     end
   end
-  return d
+  d
 end
 
 def dijkstra(graph, s_vert)
@@ -64,36 +65,33 @@ def dijkstra(graph, s_vert)
   (0..(graph.length - 1)).each do |i|
     if i == s_vert
       pq.push([0, i])
-    elsif
+    else
       pq.push([INF, i])
     end
   end
-  while pq.top != nil
+  while !pq.top.nil?
     vert = pq.pop
     result[vert[1]] = vert[0]
     pq_arr = pq.to_a
     (0..(pq_arr.length - 1)).each do |i|
-      pq_arr[i] = [[pq_arr[i][0], result[vert[1]] + w[vert[1]][pq_arr[i][1]]].min, pq_arr[i][1]]
+      pq_arr[i] = [[pq_arr[i][0], result[vert[1]] + graph[vert[1]][pq_arr[i][1]]].min, pq_arr[i][1]]
     end
     pq.replace(pq_arr)
   end
-  return result
+  result
 end
 
 def test_algorithm_times
   # Function to run tests for algorithm solving times
-
   results = ''
   (25..1000).step(25).each do |i|
-    results += i.to_s + ', '
-    g = adj_mat_from_file("graphs/" + i.to_s + "verts.txt")
-
+    results += "#{i.to_s}, "
+    g = adj_mat_from_file("graphs/#{i.to_s}verts.txt")
     # Run Floyd's algorithm
     starting_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     res_floyd = floyd(g)
     elapsed_time_floyd = Process.clock_gettime(Process::CLOCK_MONOTONIC) - starting_time
-    results += elapsed_time_floyd.to_s + ', '
-
+    results += "#{elapsed_time_floyd.to_s}, "
     # Run Dijkstra's overall starting points (note this is not the intended way
     # to utilize this algorithm, however we are using it as point of comparion).
     res_dijkstra = Array.new(g.length) { Array.new(g.length, nil) }
@@ -102,18 +100,17 @@ def test_algorithm_times
       res_dijkstra[sv] = dijkstra(g, sv)
     end
     elapsed_time_dijkstra = Process.clock_gettime(Process::CLOCK_MONOTONIC) - starting_time
-    results += elapsed_time_dijkstra.to_s + ', '
-
+    results += "#{elapsed_time_dijkstra.to_s}, "
     # Double check again that the results are the same
     error_msg = "error: dijkstra result does not match output from floyd's"
     raise error_msg unless res_floyd == res_dijkstra
   end
   # write results to file
-  f_name = 'results_' + date.today().strftime("%b-%d-%Y") + '.csv'
+  f_name = "results_#{date.today.strftime("%b-%d-%Y")}.csv"
   File.open(f_name, "w") do |f|
-    f.write("Ruby Results" + '\n')
-    f.write("Nodes in Graph, Floyd's elapsed time, Dijkstra's elapsed time" + '\n')
-    f.write(results + '\n')
+    f.write("Ruby Results\n")
+    f.write("Nodes in Graph, Floyd's elapsed time, Dijkstra's elapsed time,\n")
+    f.write("#{results}\n")
   end
 end
 
