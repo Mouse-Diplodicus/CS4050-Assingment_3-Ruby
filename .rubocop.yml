@@ -7,5 +7,5 @@ Metrics/AbcSize:
 Metrics/MethodLength:
   Max: 22
 
-  Style/Encoding:
-    Enabled: false
+Style/Encoding:
+  Enabled: false
