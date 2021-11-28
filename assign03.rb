@@ -102,45 +102,6 @@ def dijkstra(w, sv)
   return result
 end
 
-def assign03_main
-  """ Demonstrate the functions, starting with creating the graph. """
-  g = adjMatFromFile("graph_10verts.txt")
-
-  # Run Floyd's algorithm
-  starting_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-  res_floyd = floyd(g)
-  elapsed_time_floyd = Process.clock_gettime(Process::CLOCK_MONOTONIC) - starting_time
-  printAdjMat(res_floyd, width=4)
-
-  # Run Dijkstra's for a single starting vertex, 2
-  start_vert = 2
-  res_dijkstra_single = dijkstra(g, start_vert)
-  printf("  Dijkstra (for starting vert %d)= : ", start_vert)
-  print(res_dijkstra_single.to_s + "\n")
-
-  # Check that the two produce same results by comparing result from
-  # dijkstra with the corresponding row from floyd's output matrix
-  error_msg = "error: dijkstra result does not match output from floyd's"
-  raise error_msg unless res_floyd[start_vert] == res_dijkstra_single
-
-  # Run Dijkstra's over all starting points (note this is not the intended way
-  # to utilize this algorithm, however we are using it as point of comparison).
-  res_dijkstra = Array.new(g.length){Array.new(g.length, nil)}
-  starting_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-  (0..(g.length - 1)).each do |sv|
-    res_dijkstra[sv] = dijkstra(g, sv)
-  end
-  elapsed_time_dijkstra = Process.clock_gettime(Process::CLOCK_MONOTONIC) - starting_time
-
-  # Compare times, Dijkstra's should be slower (for non-trivial sized graphs)
-  printf("  Dijkstra's elapsed time (for all starts): %.2f\n", elapsed_time_dijkstra)
-  printf("  Floyd's elapsed time: %.2f\n", elapsed_time_floyd)
-
-  # Double check again that the results are the same
-  error_msg = "error: dijkstra result does not match output from floyd's"
-  raise error_msg unless res_floyd == res_dijkstra
-end
-
 def test_algorithm_times
   """ Function to run tests for algorithm solving times """
 
