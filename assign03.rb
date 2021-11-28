@@ -141,6 +141,42 @@ def assign03_main
   raise error_msg unless res_floyd == res_dijkstra
 end
 
+def test_algorithm_times
+  """ Function to run tests for algorithm solving times """
 
-# Check if the program is being run directly (i.e. not being imported)
-assign03_main
+  results = ''
+  range(25, 1000, 25).each do |i|
+    results += str(i) + ', '
+    g = adjMatFromFile("graphs/" + str(i) + "verts.txt")
+
+    # Run Floyd's algorithm
+    starting_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    res_floyd = floyd(g)
+    elapsed_time_floyd = Process.clock_gettime(Process::CLOCK_MONOTONIC) - starting_time
+    results += str(elapsed_time_floyd) + ', '
+
+    # Run Dijkstra's overall starting points (note this is not the intended way
+    # to utilize this algorithm, however we are using it as point of comparion).
+    res_dijkstra = Array.new(g.length) { Array.new(g.length, nil) }
+    starting_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    (0..(g.length - 1)).each do |sv|
+      res_dijkstra[sv] = dijkstra(g, sv)
+    end
+    elapsed_time_dijkstra = Process.clock_gettime(Process::CLOCK_MONOTONIC) - starting_time
+    results += str(elapsed_time_dijkstra) + ', '
+
+    # Double check again that the results are the same
+    error_msg = "error: dijkstra result does not match output from floyd's"
+    raise error_msg unless res_floyd == res_dijkstra
+  end
+  # write results to file
+  f_name = 'results_' + date.today().strftime("%b-%d-%Y") + '.csv'
+  File.open(f_name, "w") do |f|
+    f.write("Ruby Results" + '\n')
+    f.write("Nodes in Graph, Floyd's elapsed time, Dijkstra's elapsed time" + '\n')
+    f.write(results + '\n')
+  end
+end
+
+# Run program
+test_algorithm_times
