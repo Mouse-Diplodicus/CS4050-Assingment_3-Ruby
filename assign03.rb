@@ -9,7 +9,7 @@ INF = (2**(0.size * 8 - 2) - 1)
 
 def adj_mat_from_file(filename)
   # Create an adj/weight matrix from a file with verts, neighbors, and weights.
-  f = open(filename)
+  f = File.open(filename)
   n_verts = f.readline.to_i
   printf(" n_verts = %d\n", n_verts)
   adjmat = Array.new(n_verts) { Array.new(n_verts, INF) }

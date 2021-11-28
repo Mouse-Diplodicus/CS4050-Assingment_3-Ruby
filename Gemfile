@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 gem 'pqueue'
-gem 'rubocop'
 gem 'rake'
+gem 'rubocop'
