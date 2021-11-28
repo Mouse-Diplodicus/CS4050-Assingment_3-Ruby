@@ -16,7 +16,7 @@ def adj_mat_from_file(filename)
     int_list = []
     line.split.each { |num| int_list.push(num.to_i) }
     vert = int_list.shift
-    raise 'error: Invalid matrix file' unless int_list.even?
+    raise 'error: Invalid matrix file' unless int_list.length.even?
 
     n_neighbors = (int_list.length / 2).to_i
     neighbors = []
