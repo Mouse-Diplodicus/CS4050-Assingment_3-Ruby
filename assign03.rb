@@ -1,34 +1,13 @@
-"""
-Assign 03 - Matthew Williams
+# Assign 03 - Matthew Williams
 
-Directions:
-    * Complete the graph algorithm functions given below. Note that it may be
-      helpful to define auxiliary/helper functions that are called from the
-      functions below.  Refer to the README.md file for additional info.
-
-    * NOTE: As with other assignments, please feel free to share ideas with
-      others and to reference sources from textbooks or online. However, do your
-      best to attain a reasonable grasp of the algorithm that you are
-      implementing as there will very likely be questions related to it on
-      quizzes/exams.
-
-    * NOTE: Remember to add a docstring for each function, and that a reasonable
-      coding style is followed (e.g. blank lines between functions).
-      Your program will not pass the tests if this is not done!
-"""
 # could be useful for Dijkstra
 require 'pqueue'
-
-# for copying arrays
-
-# for timing checks
-
 # use a very large number as placeholder for infinity
 INF = (2**(0.size * 8 -2) -1)
 
 
 def adjMatFromFile(filename)
-  """ Create an adj/weight matrix from a file with verts, neighbors, and weights. """
+  # Create an adj/weight matrix from a file with verts, neighbors, and weights.
   f = open(filename)
   n_verts = f.readline().to_i
   printf(" n_verts = %d\n", n_verts)
@@ -53,7 +32,7 @@ def adjMatFromFile(filename)
 end
 
 def printAdjMat(mat, width=3)
-  """ Print an adj/weight matrix padded with spaces and with vertex names. """
+  # Print an adj/weight matrix padded with spaces and with vertex names.
   res_str = '       '
   (0..(mat.length - 1)).each { |v| res_str += v.to_s.rjust(width) }
   res_str += "\n" + '      --' + '-' * (width * mat.length) + "\n"
@@ -68,7 +47,7 @@ def printAdjMat(mat, width=3)
 end
 
 def floyd(w)
-  """ Carry out Floyd's algorithm using W as a weight/adj matrix. """
+  # Carry out Floyd's algorithm using W as a weight/adj matrix.
   d = Marshal.load(Marshal.dump(w))
   (0..(w.length-1)).each do |i|
     (0..(w.length-1)).each do |j|
@@ -80,7 +59,7 @@ end
 
 
 def dijkstra(w, sv)
-  """ Carry out Dijkstra's using W as a weight/adj matrix and sv as starting vert. """
+  # Carry out Dijkstra's using W as a weight/adj matrix and sv as starting vert.
   pq = PQueue.new(){ |a,b| a[0] < b[0] }
   result = Array.new(w.length, INF)
   (0..(w.length - 1)).each do |i|
@@ -103,7 +82,7 @@ def dijkstra(w, sv)
 end
 
 def test_algorithm_times
-  """ Function to run tests for algorithm solving times """
+  # Function to run tests for algorithm solving times
 
   results = ''
   (25..1000).step(25).each do |i|
