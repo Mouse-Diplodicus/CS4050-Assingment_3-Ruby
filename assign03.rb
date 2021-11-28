@@ -1,5 +1,5 @@
-# Assign 03 - Matthew Williams
 # frozen_string_literal: true
+# Assign 03 - Matthew Williams
 
 # could be useful for Dijkstra
 require 'pqueue'
@@ -85,13 +85,13 @@ def test_algorithm_times
   # Function to run tests for algorithm solving times
   results = ''
   (25..1000).step(25).each do |i|
-    results += "#{i.to_s}, "
-    g = adj_mat_from_file("graphs/#{i.to_s}verts.txt")
+    results += "#{i}, "
+    g = adj_mat_from_file("graphs/#{i}verts.txt")
     # Run Floyd's algorithm
     starting_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     res_floyd = floyd(g)
     elapsed_time_floyd = Process.clock_gettime(Process::CLOCK_MONOTONIC) - starting_time
-    results += "#{elapsed_time_floyd.to_s}, "
+    results += "#{elapsed_time_floyd}, "
     # Run Dijkstra's overall starting points (note this is not the intended way
     # to utilize this algorithm, however we are using it as point of comparion).
     res_dijkstra = Array.new(g.length) { Array.new(g.length, nil) }
@@ -100,13 +100,13 @@ def test_algorithm_times
       res_dijkstra[sv] = dijkstra(g, sv)
     end
     elapsed_time_dijkstra = Process.clock_gettime(Process::CLOCK_MONOTONIC) - starting_time
-    results += "#{elapsed_time_dijkstra.to_s},\n"
+    results += "#{elapsed_time_dijkstra},\n"
     # Double check again that the results are the same
     error_msg = "error: dijkstra result does not match output from floyd's"
     raise error_msg unless res_floyd == res_dijkstra
   end
   # write results to file
-  f_name = "results_#{date.today.strftime("%b-%d-%Y")}.csv"
+  f_name = "results_#{date.today.strftime('%b-%d-%Y')}.csv"
   File.open(f_name, "w") do |f|
     f.write("Ruby Results\n")
     f.write("Nodes in Graph, Floyd's elapsed time, Dijkstra's elapsed time,\n")
