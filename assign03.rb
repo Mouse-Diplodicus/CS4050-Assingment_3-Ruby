@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Assign 03 - Matthew Williams
 
 # could be useful for Dijkstra
@@ -69,7 +70,7 @@ def dijkstra(graph, s_vert)
       pq.push([INF, i])
     end
   end
-  while !pq.top.nil?
+  until pq.top.nil?
     vert = pq.pop
     result[vert[1]] = vert[0]
     pq_arr = pq.to_a
@@ -107,7 +108,7 @@ def test_algorithm_times
   end
   # write results to file
   f_name = "results_#{date.today.strftime('%b-%d-%Y')}.csv"
-  File.open(f_name, "w") do |f|
+  File.open(f_name, 'w') do |f|
     f.write("Ruby Results\n")
     f.write("Nodes in Graph, Floyd's elapsed time, Dijkstra's elapsed time,\n")
     f.write("#{results}\n")
