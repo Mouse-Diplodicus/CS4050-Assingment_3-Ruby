@@ -1,15 +1,15 @@
 # Assign 03 - Matthew Williams
+# frozen_string_literal: true
 
 # could be useful for Dijkstra
 require 'pqueue'
 # use a very large number as placeholder for infinity
-INF = (2**(0.size * 8 -2) -1)
+INF = (2**(0.size * 8 - 2) - 1)
 
-
-def adjMatFromFile(filename)
+def adj_mat_from_file(filename)
   # Create an adj/weight matrix from a file with verts, neighbors, and weights.
   f = open(filename)
-  n_verts = f.readline().to_i
+  n_verts = f.readline.to_i
   printf(" n_verts = %d\n", n_verts)
   adjmat = Array.new(n_verts){Array.new(n_verts, INF)}
   (0..(n_verts - 1)).each { |i| adjmat[i][i] = 0 }
@@ -31,11 +31,11 @@ def adjMatFromFile(filename)
   return adjmat
 end
 
-def printAdjMat(mat, width=3)
+def print_adj_mat(mat, width=3)
   # Print an adj/weight matrix padded with spaces and with vertex names.
   res_str = '       '
   (0..(mat.length - 1)).each { |v| res_str += v.to_s.rjust(width) }
-  res_str += "\n" + '      --' + '-' * (width * mat.length) + "\n"
+  res_str += "\n      --" + '-' * (width * mat.length) + "\n"
   mat.each_with_index do |row, i|
     row_str = ''
     row.each do |elem|
@@ -46,33 +46,32 @@ def printAdjMat(mat, width=3)
   print(res_str)
 end
 
-def floyd(w)
+def floyd(graph)
   # Carry out Floyd's algorithm using W as a weight/adj matrix.
-  d = Marshal.load(Marshal.dump(w))
-  (0..(w.length-1)).each do |i|
-    (0..(w.length-1)).each do |j|
-      (0..(w.length-1)).each { |k| d[j][k] = [d[j][i] + d[i][k], d[j][k]].min }
+  d = Marshal.load(Marshal.dump(graph))
+  (0..(graph.length - 1)).each do |i|
+    (0..(graph.length - 1)).each do |j|
+      (0..(graph.length - 1)).each { |k| d[j][k] = [d[j][i] + d[i][k], d[j][k]].min }
     end
   end
   return d
 end
 
-
-def dijkstra(w, sv)
-  # Carry out Dijkstra's using W as a weight/adj matrix and sv as starting vert.
-  pq = PQueue.new(){ |a,b| a[0] < b[0] }
-  result = Array.new(w.length, INF)
-  (0..(w.length - 1)).each do |i|
-    if i == sv
+def dijkstra(graph, s_vert)
+  # Carry out Dijkstra's using W as a weight/adj matrix and s_vert as starting vert.
+  pq = PQueue.new { |a, b| a[0] < b[0] }
+  result = Array.new(graph.length, INF)
+  (0..(graph.length - 1)).each do |i|
+    if i == s_vert
       pq.push([0, i])
     elsif
       pq.push([INF, i])
     end
   end
-  while pq.top() != nil
+  while pq.top != nil
     vert = pq.pop
     result[vert[1]] = vert[0]
-    pq_arr = pq.to_a()
+    pq_arr = pq.to_a
     (0..(pq_arr.length - 1)).each do |i|
       pq_arr[i] = [[pq_arr[i][0], result[vert[1]] + w[vert[1]][pq_arr[i][1]]].min, pq_arr[i][1]]
     end
@@ -87,7 +86,7 @@ def test_algorithm_times
   results = ''
   (25..1000).step(25).each do |i|
     results += i.to_s + ', '
-    g = adjMatFromFile("graphs/" + i.to_s + "verts.txt")
+    g = adj_mat_from_file("graphs/" + i.to_s + "verts.txt")
 
     # Run Floyd's algorithm
     starting_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
