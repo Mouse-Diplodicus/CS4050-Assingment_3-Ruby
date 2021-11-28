@@ -1,11 +1,11 @@
+Style/Encoding:
+  Enabled: false
+
 Layout/LineLength:
   Max: 99
 
 Metrics/AbcSize:
-  Max: 45
+  Max: 42
 
 Metrics/MethodLength:
-  Max: 22
-
-Style/Encoding:
-  Enabled: false
+  Max: 25
