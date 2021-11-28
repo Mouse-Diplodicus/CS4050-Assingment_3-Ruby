@@ -1,7 +1,0 @@
-source 'https://rubygems.org'
-gem 'pqueue'
-gem 'rubocop'
-gem 'rubocop-rails'
-gem 'rubocop-minitest'
-gem 'rubocop-performance'
-gem 'rubocop-rspec'
