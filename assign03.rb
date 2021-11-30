@@ -82,9 +82,15 @@ end
 
 def test_algorithm_times
   # Function to run tests for algorithm solving times
-  results = ''
-  (25..1000).step(25).each do |i|
-    results += "#{i}, "
+  time = Time.new
+  f_name = "results_#{time.strftime('%m-%d-%Y_%H.%M.%S')}.csv"
+  # write header to file
+  File.open(f_name, 'w') do |f|
+    f.write("Ruby Results\n")
+    f.write("Nodes in Graph, Floyd's elapsed time, Dijkstra's elapsed time,\n")
+  end
+  (25..5000).step(25).each do |i|
+    results = "#{i}, "
     g = adj_mat_from_file("graphs/#{i}verts.txt")
     # Run Floyd's algorithm
     starting_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
@@ -103,13 +109,10 @@ def test_algorithm_times
     # Double check again that the results are the same
     error_msg = "error: dijkstra result does not match output from floyd's"
     raise error_msg unless res_floyd == res_dijkstra
-  end
-  # write results to file
-  f_name = "results_#{date.today.strftime('%b-%d-%Y')}.csv"
-  File.open(f_name, 'w') do |f|
-    f.write("Ruby Results\n")
-    f.write("Nodes in Graph, Floyd's elapsed time, Dijkstra's elapsed time,\n")
-    f.write("#{results}\n")
+    # write results to file
+    File.open(f_name, 'a') do |f|
+      f.write("#{results}")
+    end
   end
 end
 
